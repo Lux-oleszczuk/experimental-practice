@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phaser Tiled demo</title>
+    <title>Forest Run — Phaser workshop</title>
+    <style>html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #10252d; } canvas { display: block; }</style>
     <script src="lib/phaser.min.js"></script>
     <script src="scenes/Scene1.js"></script>
     <script>
@@ -20,7 +21,7 @@
                 default:"arcade",
                 arcade:{
                     gravity:{y:2180},
-                    debug:true,
+                    debug:false,
                     overlapBias:8, //maybe required for larger tiles
                     tileBias:32 // maybe required for larger tiles
                 }
