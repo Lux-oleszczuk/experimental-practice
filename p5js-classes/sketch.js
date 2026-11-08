@@ -1,46 +1,57 @@
-// use to store all shapes
+// Each shape owns its movement, colour and lifetime through the Shape class.
 let allShapes = [];
-let buttons = [];
+let selectedShape = 'circle';
+let selectedColour = '#75e2cf';
+let drawing = false;
+let lastSpawn = 0;
+
 function setup() {
-  createCanvas(innerWidth, innerHeight);
-  let offset=((width-(SoundButton.Width*6))/2);
-  for(let i=0;i<6;i++){
-    let button = new SoundButton(i,i*SoundButton.Width,height-SoundButton.Height,color(random(255),random(255),random(255)));
-    buttons.push(button);
+  const canvas = createCanvas(windowWidth, windowHeight);
+  canvas.elt.setAttribute('aria-label', 'Interactive shape drawing area');
+  canvas.elt.addEventListener('pointerdown', () => { drawing = true; });
+  window.addEventListener('pointerup', () => { drawing = false; });
+  window.addEventListener('blur', () => { drawing = false; });
+  for (const name of ['circle', 'square']) {
+    document.getElementById(name).addEventListener('click', () => {
+      selectedShape = name;
+      for (const choice of ['circle', 'square']) {
+        document.getElementById(choice).setAttribute('aria-pressed', String(choice === name));
+      }
+    });
   }
-  _renderer.canvas.addEventListener("soundButtonPressed",placeShape)
-  
-}
-function placeShape(event){
-  let buttonCircle = new Circle(event.detail.x,event.detail.y, random(20,100), event.detail.colour,random(2000,5000),random(-2,2),random(-2,2))
-  allShapes.push(buttonCircle)
+  document.querySelectorAll('[data-colour]').forEach(button => {
+    button.addEventListener('click', () => {
+      selectedColour = button.dataset.colour;
+      document.querySelectorAll('[data-colour]').forEach(choice => {
+        choice.setAttribute('aria-pressed', String(choice === button));
+      });
+    });
+  });
+  document.getElementById('clear').addEventListener('click', () => { allShapes = []; });
 }
 
 function draw() {
-  //process interaction
-  if (mouseIsPressed) {
-    let myShape = new Circle(mouseX, mouseY, random(10, 100), color(random(255), random(255), random(255)), random(2000, 4000), random(-5,5), random(-5,5))
-    allShapes.push(myShape)
+  background('#101820');
+  // Throttle spawning so holding the mouse does not create an object every frame.
+  if (drawing && mouseIsPressed && millis() - lastSpawn > 32 &&
+      mouseX >= 0 && mouseX <= width && mouseY > 175 && mouseY < height - 145) {
+    const ShapeType = selectedShape === 'square' ? Square : Circle;
+    allShapes.push(new ShapeType(mouseX, mouseY, random(24, 85), color(selectedColour),
+      random(2500, 5000), random(-2, 2), random(-2, 2)));
+    lastSpawn = millis();
   }
-  // process updated
-  for (let i = 0; i < allShapes.length; i++) {
-    allShapes[i].update()
-    if(allShapes[i].dead){
-      allShapes.splice(i,1);
-      i--;
-    }
+  for (let i = allShapes.length - 1; i >= 0; i--) {
+    allShapes[i].update();
+    if (allShapes[i].dead) allShapes.splice(i, 1);
+    else allShapes[i].draw();
   }
-  //update buttons
-  for(let i=0;i<buttons.length;i++){
-    buttons[i].update();
-  }
-  //render (draw)
-  background(220);
-  for (let i = 0; i < allShapes.length; i++) {
-    allShapes[i].draw()
-  }
-  // loop through and draw all buttons
-  for(let i=0;i<buttons.length;i++){
-    buttons[i].draw()
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  // Keep existing particles inside the resized drawing area.
+  for (const shape of allShapes) {
+    shape.x = constrain(shape.x, shape.size / 2, width - shape.size / 2);
+    shape.y = constrain(shape.y, shape.size / 2, height - shape.size / 2);
   }
 }

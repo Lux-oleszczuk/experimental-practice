@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Sketch</title>
-
-    <link rel="stylesheet" type="text/css" href="style.css">
-
-    <script src="libraries/p5.min.js"></script>
-    <script src="libraries/p5.sound.min.js"></script>
-  </head>
-
-  <body>
-    <script src="sketch.js"></script>
-    <script src="classes/Shape.js"></script>
-    <script src="classes/Circle.js"></script>
-    <script src="classes/Square.js"></script>
-    <script src="classes/SoundButton.js"></script>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shape Playground — p5.js classes</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="libraries/p5.min.js"></script>
+  <script src="libraries/p5.sound.min.js"></script>
+</head>
+<body>
+  <header><p class="eyebrow">EXPERIMENTAL PRACTICE / 01</p><h1>Shape Playground<span>.</span></h1><p>Click and drag to create shapes. Watch them drift, bounce and fade.</p></header>
+  <nav aria-label="Drawing controls">
+    <div class="group"><span class="label">SHAPE</span><button id="circle" aria-pressed="true">Circle</button><button id="square" aria-pressed="false">Square</button></div>
+    <div class="group colours" aria-label="Colour palette"><span class="label">COLOUR</span><button class="swatch" data-colour="#75e2cf" aria-label="Mint" aria-pressed="true" style="--swatch:#75e2cf"></button><button class="swatch" data-colour="#b5a1ff" aria-label="Lilac" aria-pressed="false" style="--swatch:#b5a1ff"></button><button class="swatch" data-colour="#ffb18d" aria-label="Peach" aria-pressed="false" style="--swatch:#ffb18d"></button><button class="swatch" data-colour="#f6df8b" aria-label="Yellow" aria-pressed="false" style="--swatch:#f6df8b"></button></div>
+    <button id="clear">Clear</button>
+  </nav>
+  <script src="classes/Shape.js"></script><script src="classes/Circle.js"></script><script src="classes/Square.js"></script><script src="classes/SoundButton.js"></script><script src="sketch.js"></script>
+</body>
 </html>
